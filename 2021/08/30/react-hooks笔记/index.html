@@ -157,6 +157,17 @@
     </span>
     
     
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/react/">react</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
 
     
     
@@ -170,7 +181,40 @@
         
 
         <div class="article-content markdown-body">
-            
+            <h4 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h4><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AboutHook</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>);</span><br><span class="line">      <span class="keyword">const</span> [show, setShow] = useState(<span class="literal">true</span>)</span><br><span class="line">      <span class="keyword">return</span> (&lt;div&gt;</span><br><span class="line">            &lt;h2&gt;<span class="built_in">this</span> is abouthook.js&lt;/h2&gt;</span><br><span class="line">            &lt;button onClick=&#123;<span class="function">() =&gt;</span> setShow(!show)&#125;&gt;显示/隐藏子组件&lt;/button&gt;</span><br><span class="line">            &lt;p&gt;</span><br><span class="line">                  &lt;button onClick=&#123;<span class="function">() =&gt;</span> setCount(count - <span class="number">1</span>)&#125;&gt;-&lt;/button&gt;</span><br><span class="line">                  &lt;span&gt;&#123;count&#125;&lt;/span&gt;</span><br><span class="line">                  &lt;button onClick=&#123;<span class="function">() =&gt;</span> setCount(count + <span class="number">1</span>)&#125;&gt;+&lt;/button&gt;</span><br><span class="line">            &lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="createContext-useContext"><a href="#createContext-useContext" class="headerlink" title="createContext()  useContext()"></a>createContext()  useContext()</h4><ul>
+<li>使用公共文件将实例导出  <strong>export default const context = createContext()</strong></li>
+<li>将需要暴露的数据通过**&lt;C.provider value={值}&gt;&lt;/C.provider&gt;**</li>
+<li>子孙组件里面中使用useContext实例,const C = useContext(导出的实例)。C里面包含传入的数据</li>
+</ul>
+<h4 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h4><ul>
+<li><p>一个function中可以存在多个useEffect</p>
+</li>
+<li><pre><code class="js">useEffect(()=&gt;&#123;
+        console.log(&#39;props.count更新时触发 &#39;);
+     
+    &#125;,[props.count]); //componentDidMount + count变化时的componentDidUpdate
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* &#96;&#96;&#96;&#96;&#96;&#96;js</span><br><span class="line">      useEffect(()&#x3D;&gt;&#123;</span><br><span class="line">          return ()&#x3D;&gt;&#123;</span><br><span class="line">              console.log(&#39;销毁了&#39;)</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;,[]) &#x2F;&#x2F;componentUnDidMount</span><br></pre></td></tr></table></figure>
+
+</code></pre>
+</li>
+</ul>
+<h4 id="useReducer实现reducer状态管理"><a href="#useReducer实现reducer状态管理" class="headerlink" title="useReducer实现reducer状态管理"></a>useReducer实现reducer状态管理</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> defaultState = &#123;</span><br><span class="line">        color: <span class="string">&#x27;red&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> [store, dispatch] = useReducer(<span class="function">(<span class="params">state, action</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (action.type === <span class="string">&#x27;changeColor&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> &#123; ...state, <span class="attr">color</span>: action.payload.color &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;,defaultState);</span><br><span class="line">    <span class="keyword">return</span> (&lt;div&gt;</span><br><span class="line">        &lt;createContext2.Provider value=&#123; &#123;<span class="attr">store</span>:store,dispatch&#125; &#125;&gt;</span><br><span class="line">            &lt;BtnGroup&gt;&lt;/BtnGroup&gt;</span><br><span class="line">            &lt;Message&gt;&lt;/Message&gt;</span><br><span class="line">        &lt;/createContext2.Provider&gt;</span><br><span class="line">    &lt;/div&gt;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h4><p>useMemo 主要用于性能优化，在hooks中数据更新会使页面重新渲染，如果 页面有调用 的函数，那么相关函数将重新计算并调用 ，useMeno主要用于解决多于调用 的问题</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">const</span> sum =useMemo(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> sum =<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">1000</span>;i++)&#123;</span><br><span class="line">             sum+=i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;sum触发&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;,[age]) </span><br><span class="line"><span class="comment">//调用时&#123;sum&#125; 不再是函数 </span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h4 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h4><p>useRef可以用于存储变量或者 dom元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import &#123;useRef&#125; from &#39;react&#39;;</span><br><span class="line">function Fn()&#123;</span><br><span class="line">      const ele &#x3D; useRef;</span><br><span class="line">      useEffect(()&#x3D;&gt;&#123;</span><br><span class="line">            ele.current &#x3D; Math.random();</span><br><span class="line">      &#125;);</span><br><span class="line">    return (&lt;div&gt;</span><br><span class="line">          &lt;input  type&#x3D;&#39;text&#39; ref&#x3D;&#123;ele&#125;&gt;&lt;&#x2F;input&gt; </span><br><span class="line">        &lt;&#x2F;div&gt;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
         </div>
 
         
